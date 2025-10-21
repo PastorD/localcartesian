@@ -8,7 +8,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-22.04, macos-13, macos-14]  # keep one Linux; you had two
+        os: [ubuntu-22.04, macos-13, macos-14]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -20,27 +20,33 @@ jobs:
           python -m pip install --upgrade pip
           pip install uv
 
+      # Set macOS arch per runner (avoid duplicates)
+      - name: Select macOS arch
+        if: startsWith(matrix.os, 'macos-')
+        run: |
+          if [ "${{ matrix.os }}" = "macos-13" ]; then
+            echo "CIBW_ARCHS_MACOS=x86_64" >> $GITHUB_ENV
+          else
+            echo "CIBW_ARCHS_MACOS=arm64" >> $GITHUB_ENV
+          fi
+
       - name: Build wheels with cibuildwheel
         env:
           CIBW_BUILD: "cp39-* cp310-* cp311-* cp312-*"
           CIBW_SKIP: "pp* *-musllinux_*"
-          CIBW_ARCHS_MACOS: "x86_64 arm64"
           MACOSX_DEPLOYMENT_TARGET: "11.0"
         run: uvx cibuildwheel --output-dir dist
 
-      # Build sdist once (on the Linux job)
-      - name: Build sdist
+      - name: Build sdist (Linux only)
         if: startsWith(matrix.os, 'ubuntu-')
         run: python -m pip install build && python -m build --sdist
 
-      # Give each matrix job a unique artifact name
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: dist-${{ matrix.os }}
           path: dist/*
           if-no-files-found: error
-          compression-level: 6
           overwrite: false
 
   publish:
@@ -50,17 +56,17 @@ jobs:
       id-token: write
       contents: read
     steps:
-      # Download all artifacts whose names start with "dist-" and MERGE them
       - uses: actions/download-artifact@v4
         with:
           pattern: dist-*
           merge-multiple: true
           path: dist
 
-      - name: Show what we will publish
-        run: ls -l dist
-
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          packages_dir: dist
+      # sanity: list sizes/checksums before publishing
+      - run: ls -lh dist && python - <<'PY'
+import glob, os, sys
+bad=[]
+for p in glob.glob("dist/*.whl"):
+    if os.path.getsize(p)<10240:  # wheels should be >10KB; tweak as you like
+        bad.append(p)
+i
