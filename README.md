@@ -73,10 +73,9 @@ Convert local Cartesian coordinates to GPS coordinates.
 
 Clone the repository and navigate to the project directory:     
 ```bash
-git clone <repository-url>
+git clone https://github.com/PastorD/localcartesian.git
 cd localcartesian
 uv sync --dev
-uv build
 ```
 It will fetch the GeographicLib binaries, build the C++ extension, and install the package in editable mode. You can now import and use `localcartesian` in your Python environment. See `examples/basic_usage.py` for example usage.
 
