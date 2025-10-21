@@ -69,4 +69,12 @@ bad=[]
 for p in glob.glob("dist/*.whl"):
     if os.path.getsize(p)<10240:  # wheels should be >10KB; tweak as you like
         bad.append(p)
-i
+if bad:
+    print("Found suspiciously small wheels:", bad); sys.exit(1)
+print("All wheel sizes look sane.")
+PY
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages_dir: dist
