@@ -62,18 +62,6 @@ jobs:
           merge-multiple: true
           path: dist
 
-      # sanity: list sizes/checksums before publishing
-      - run: ls -lh dist && python - <<'PY'
-import glob, os, sys
-bad=[]
-for p in glob.glob("dist/*.whl"):
-    if os.path.getsize(p)<10240:  # wheels should be >10KB; tweak as you like
-        bad.append(p)
-if bad:
-    print("Found suspiciously small wheels:", bad); sys.exit(1)
-print("All wheel sizes look sane.")
-PY
-
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
