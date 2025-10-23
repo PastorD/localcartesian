@@ -1,6 +1,6 @@
 [project]
 name = "localcartesian"
-version = "0.1.3"
+version = "0.1.4"
 description = "Fast GPS to local Cartesian coordinate conversion using GeographicLib"
 readme = "README.md"
 license = {text = "MIT"}

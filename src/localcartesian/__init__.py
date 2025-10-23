@@ -5,7 +5,7 @@ This package provides functions to convert GPS coordinates (latitude, longitude)
 to local Cartesian coordinates (x, y) and vice versa using the GeographicLib library.
 """
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 
 try:
     from ._core import gps2xy, xy2gps
