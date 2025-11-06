@@ -1,0 +1,6 @@
+dist/
+build/
+_skbuild/
+.pybuild/
+*.egg-info/
+PKG-INFO

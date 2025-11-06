@@ -8,11 +8,12 @@ Build-Depends:
   pybuild-plugin-pyproject,
   python3-all-dev,
   python3-scikit-build-core,
+  python3-pyproject-metadata,
   cmake,
   ninja-build,
   pkg-config,
   pybind11-dev,                  
-  libgeographic-dev
+  libgeographiclib-dev
 Standards-Version: 4.7.0
 Homepage: https://github.com/danpasmor/localcartesian
 Rules-Requires-Root: no
