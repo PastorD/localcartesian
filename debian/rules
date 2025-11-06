@@ -1,0 +1,23 @@
+#!/usr/bin/make -f
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export PYBUILD_NAME = localcartesian
+export PYBUILD_SYSTEM = pyproject
+# Use the system GeographicLib for Debian/Ubuntu packages (policy-friendly)
+export CMAKE_ARGS = -DUSE_SYSTEM_GEOGRAPHICLIB=ON
+
+%:
+	dh $@ --with python3 --buildsystem=pybuild --parallel
+
+override_dh_auto_configure:
+	pybuild --system=pyproject --configure
+
+override_dh_auto_build:
+	pybuild --system=pyproject --build
+
+override_dh_auto_test:
+	# enable if you have tests you want to run
+	# pybuild --system=pyproject --test
+	:
+
+override_dh_auto_install:
+	pybuild --system=pyproject --install --dest-dir=$(CURDIR)/debian/python3-localcartesian

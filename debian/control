@@ -1,0 +1,26 @@
+Source: python3-localcartesian
+Section: python
+Priority: optional
+Maintainer: Daneil Pastor <danpasmor@gmail.com>
+Build-Depends:
+  debhelper-compat (= 13),
+  dh-python,
+  pybuild-plugin-pyproject,
+  python3-all-dev,
+  python3-scikit-build-core,
+  cmake,
+  ninja-build,
+  pkg-config,
+  pybind11-dev,                  
+  libgeographic-dev
+Standards-Version: 4.7.0
+Homepage: https://github.com/danpasmor/localcartesian
+Rules-Requires-Root: no
+
+Package: python3-localcartesian
+Architecture: any
+Depends: ${python3:Depends}, ${shlibs:Depends}, ${misc:Depends}
+Description: Fast GPS→Local Cartesian conversion (GeographicLib bindings)
+ Python 3 bindings for GeographicLib LocalCartesian (forward/reverse) using
+ pybind11 and C++. Built with scikit-build-core (CMake). Links system
+ GeographicLib; no vendored libs.
